@@ -47,20 +47,37 @@ const io = socket(server, {
 global.onlineUsers = new Map();
 
 io.on("connection",(socket)=>{
-    
     socket.on('user-joined', (username)=>{
+
         onlineUsers.set(username, socket.id);
+        io.emit("userJoined", Array.from(onlineUsers.keys()));
+    });
+
+    socket.on('disconnect', () =>{
+        let keyToDelete = '';
+        for(let [key, value] of onlineUsers.entries()){
+            if(value === socket.id) keyToDelete = key;
+        }
+        onlineUsers.delete(keyToDelete);
+        io.emit("userJoined", Array.from(onlineUsers.keys()));
     });
 
     socket.on('send-msg', (data)=>{
         const reciever = onlineUsers.get(data?.reciever);
-        if(reciever){
-            socket.to(reciever).emit("recieve-msg", data?.message);
-        }
+        if(reciever) socket.to(reciever).emit("recieve-msg", data?.message);
+    });
+
+    socket.on('sendTypingStatus', (username)=>{
+        const reciever = onlineUsers.get(username);
+        if(reciever) socket.to(reciever).emit("recieveTypingStatus", true);
     });
 
     socket.on('follow', (myUsername, username)=>{
         socket.to(onlineUsers.get(username)).emit("notification", myUsername, 'started following you');
-    })
-})
+    });
+    
+    socket.on('like', (myUsername, username)=>{
+        socket.to(onlineUsers.get(username)).emit("notification", myUsername, 'liked your post');
+    });
+});
 

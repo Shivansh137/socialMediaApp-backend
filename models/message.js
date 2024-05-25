@@ -20,10 +20,13 @@ const messageSchema = new mongoose.Schema({
     isReaded:{
         type: Boolean,
         default: false
+    },
+    time: {
+       type: Date,
+       default: Date.now
     }
-}, {
-    timestamps: true
 });
+
 
 const Message = new mongoose.model('message', messageSchema);
 
