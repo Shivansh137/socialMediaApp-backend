@@ -1,41 +1,41 @@
-const { mongoose, SchemaTypes} = require("mongoose");
+const { mongoose } = require("mongoose");
 
 const postSchema = new mongoose.Schema({
-    username:{
-        type:String,
-        required:true
+    username: {
+        type: String,
+        required: true
     },
-    title:{
-        type:String,
-        min:2,
-        max:20
+    title: {
+        type: String,
+        min: 2,
+        max: 20
     },
-    location:{
-        type:String,
-        min:2,
-        max:20
+    location: {
+        type: String,
+        min: 2,
+        max: 20
     },
-   
-    ratio:{
-        type:String,
-        default:'1/1'
+
+    ratio: {
+        type: String,
+        default: '1/1'
     },
-    media:[
+    media: [
         new mongoose.Schema({
-            public_id:String,
-            media_type:String,
-            extension:String
-        },{
-            _id:false
+            public_id: String,
+            media_type: String,
+            extension: String
+        }, {
+            _id: false
         })
     ],
-    likes:Array,
-    comments:[new mongoose.Schema({
-          username:String,
-          message:String
+    likes: Array,
+    comments: [new mongoose.Schema({
+        username: String,
+        message: String
     }
     )]
-},{
+}, {
     timestamps: true
 });
 

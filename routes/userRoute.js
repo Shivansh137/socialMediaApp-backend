@@ -4,8 +4,8 @@ const upload = require('../middlewares/multer')
 const verifyJWT = require('../middlewares/verifyJWT')
 
 router.route('/')
-.get(userController.getAllUsers)
-.post(upload.single('profilePic'), userController.addUser)
+    .get(userController.getAllUsers)
+    .post(upload.single('profilePic'), userController.addUser)
 
 router.patch('/change_password', userController.changePassword);
 
@@ -16,10 +16,10 @@ router.get('/following/:username', userController.getFollowingData);
 router.get('/profilePic/:username', userController.getProfilePicByUsername);
 
 router.route('/:username')
-.patch(verifyJWT,upload.single('profilePic'), userController.updateUser)
-.delete(verifyJWT, userController.deleteUser)
+    .patch(verifyJWT, upload.single('profilePic'), userController.updateUser)
+    .delete(verifyJWT, userController.deleteUser)
 
-router.get('/:username',userController.getUserByUsername);
+router.get('/:username', userController.getUserByUsername);
 
 router.get('/search/:reg', userController.searchUser);
 

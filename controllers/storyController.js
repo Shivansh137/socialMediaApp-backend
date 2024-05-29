@@ -12,7 +12,7 @@ const addStory = asyncHandler(async (req, res) => {
     const datauri = getDataUri(file);
     const type = file.mimetype?.split('/')[0];
     const imageData = await cloudinary.v2.uploader.upload(datauri, { resource_type: type, folder: 'socialMediaApp/stories' });
-    const story = await Story.create({username, media:{ public_id: imageData?.public_id, file_type: type }})
+    const story = await Story.create({ username, media: { public_id: imageData?.public_id, file_type: type } })
     return res.json(story);
 })
 

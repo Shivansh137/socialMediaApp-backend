@@ -54,8 +54,6 @@ const getProfilePicByUsername = asyncHandler(async (req, res) => {
   res.json(response?.profilePic);
 });
 
-
-
 // @UPDATE USER
 const updateUser = asyncHandler(async (req, res) => {
   const { username, name } = req.body;
@@ -63,7 +61,7 @@ const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ username }).exec();
   if (!user) return res.status(409).json({ message: "User not exists" });
   if (name && name !== user.name) user.name = name;
- 
+
   if (req.file) {
     const datauri = getDataUri(req.file);
     const imageData = await cloudinary.v2.uploader.upload(datauri, { folder: 'socialMediaApp' });
@@ -75,18 +73,19 @@ const updateUser = asyncHandler(async (req, res) => {
 })
 
 // Change password
- const changePassword  = asyncHandler( async (req,res) => {
-  const {c_password, n_password, username} = req.body;
+const changePassword = asyncHandler(async (req, res) => {
+  const { c_password, n_password, username } = req.body;
   if (!username) return response(409, "username is required");
   const user = await User.findOne({ username }).exec();
   if (!user) return res.status(409).json({ message: "User not exists" });
-    const isCorrectPassword = await bcrypt.compare(c_password, user.password);
-    if(!isCorrectPassword) return res.status(409).json({message:'Incorrect password'});
-   const hashed_password = await bcrypt.hash(n_password, 10);
-   user.password = hashed_password;
-   await user.save();
-   res.json({message:'Password Changed'});
- })
+  const isCorrectPassword = await bcrypt.compare(c_password, user.password);
+  if (!isCorrectPassword) return res.status(409).json({ message: 'Incorrect password' });
+  const hashed_password = await bcrypt.hash(n_password, 10);
+  user.password = hashed_password;
+  await user.save();
+  res.json({ message: 'Password Changed' });
+})
+
 //DELETE USER
 const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -130,6 +129,7 @@ const getFollowersData = asyncHandler(async (req, res) => {
   const data = await User.find({ username: { $in: user?.followers } }, { username: 1, name: 1, profilePic: 1, _id: 0 });
   res.json(data);
 })
+
 const getFollowingData = asyncHandler(async (req, res) => {
   const { username } = req.params;
   const user = await User.findOne({ username }).lean().exec();
@@ -148,16 +148,16 @@ const searchUser = asyncHandler(async (req, res) => {
 
 const addNotification = asyncHandler(async (req, res) => {
   const { username } = req.params;
-  const { username2 ,message } = req.body;
+  const { username2, message } = req.body;
   const user = await User.findOne({ username }).exec();
   if (!user) return res.status(409).json({ message: "User not exists" });
-  user?.notifications.push({ username:username2, message });
+  user?.notifications.push({ username: username2, message });
   await user.save();
-  res.json({message:'Notification added'})
+  res.json({ message: 'Notification added' })
 })
 const getAllNotifications = asyncHandler(async (req, res) => {
   const { username } = req.params;
-  const user = await User.findOne({ username }, {_id:0, notifications:1}).lean().exec();
+  const user = await User.findOne({ username }, { _id: 0, notifications: 1 }).lean().exec();
   if (!user) return res.status(409).json({ message: "User not exists" });
   res.json(user.notifications)
 })
@@ -167,7 +167,7 @@ const clearNotifications = asyncHandler(async (req, res) => {
   if (!user) return res.status(409).json({ message: "User not exists" });
   user.notifications = [];
   await user.save();
-  res.json({message:'Notifications cleared'});
+  res.json({ message: 'Notifications cleared' });
 })
 
 module.exports = {

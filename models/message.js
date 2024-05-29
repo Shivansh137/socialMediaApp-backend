@@ -13,21 +13,19 @@ const messageSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    biggerText:{
+    biggerText: {
         type: Boolean,
         default: false
     },
-    isReaded:{
+    isReaded: {
         type: Boolean,
         default: false
     },
     time: {
-       type: Date,
-       default: Date.now
+        type: Date,
+        default: Date.now
     }
 });
 
-
 const Message = new mongoose.model('message', messageSchema);
-
 module.exports = Message;

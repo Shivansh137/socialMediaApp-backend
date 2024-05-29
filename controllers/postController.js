@@ -51,16 +51,12 @@ const addPost = asyncHandler(async (req, res) => {
     return res.json({ message: 'Post Created' });
 })
 
-const updatePost = asyncHandler(async (req, res) => {
-
-})
 const deletePost = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const response = await Post.deleteOne({ _id: id });
     if (!response?.deletedCount) return res.status(404).json({ message: 'Post Not found' })
     res.json({ message: "Post deleted" });
 })
-
 
 const handleLike = asyncHandler(async (req, res) => {
     const { id } = req.params;
@@ -77,13 +73,13 @@ const addComment = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { username, message } = req.body;
     const post = await Post.findById(id).exec();
-    post?.comments.push({username, message});
+    post?.comments.push({ username, message });
     await post?.save();
-    res.json({message:'Success'});
+    res.json({ message: 'Success' });
 });
 
-const getAllComments = asyncHandler(async (req,res)=>{
-    const {id} = req.params;
+const getAllComments = asyncHandler(async (req, res) => {
+    const { id } = req.params;
     const post = await Post.findById(id).lean().exec()
     const comments = post?.comments
     res.send(comments);
@@ -94,7 +90,6 @@ module.exports = {
     getUserPostsByUsername,
     getPostById,
     addPost,
-    updatePost,
     deletePost,
     handleLike,
     addComment,

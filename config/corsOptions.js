@@ -1,4 +1,4 @@
-const allowedOrigins = ['http://localhost:5173', 'http://192.168.43.46:5173', process.env.host]
+const allowedOrigins = ['http://localhost:5173', process.env.host]
 
 const corsOptions = {
   origin: (origin, callback) => {

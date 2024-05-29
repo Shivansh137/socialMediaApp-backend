@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         required: true,
-        unique:true,
+        unique: true,
         min: 2,
         max: 20
     },
@@ -18,25 +18,25 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    refreshTokens:[
+    refreshTokens: [
         {
-            type:String
+            type: String
         }
     ],
-    profilePic:{
-        type:String
+    profilePic: {
+        type: String
     },
     followers: [],
     following: [],
-    notifications:[new mongoose.Schema({
+    notifications: [new mongoose.Schema({
         username: String,
-        message:String,
-        time:{
-            type:Date,
+        message: String,
+        time: {
+            type: Date,
             default: new Date().toISOString()
         }
-    },{
-        _id:false
+    }, {
+        _id: false
     })]
 });
 
