@@ -50,7 +50,6 @@ global.onlineUsers = new Map();
 io.on("connection", (socket) => {
 
     socket.on('user-joined', (username) => {
-        console.log(username + 'joined');
         onlineUsers.set(username, socket.id);
         io.emit("userJoined", Array.from(onlineUsers.keys()));
     });

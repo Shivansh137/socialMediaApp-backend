@@ -22,6 +22,10 @@ const refresh = asyncHandler(async (req, res) => {
     jwt.verify(cookies.jwt, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
         if (err) return res.status(401).json({ message: "Unauthorized" });
         const user = await User.findOne({ username: decoded.username }).exec();
+        if (!user) {
+            res.clearCookie('jwt', { httpOnly: true, sameSite: 'none', secure: true });
+            return res.status(500).json({ message: "Internal server error" });
+        }
         const accessToken = jwt.sign({ username: decoded.username, name: user.name, profilePic: user.profilePic }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" })
         res.json({ accessToken });
     })
